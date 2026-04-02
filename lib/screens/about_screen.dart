@@ -143,7 +143,7 @@ class AboutScreen extends StatelessWidget {
       ('5+', 'Ans XP'),
       ('5', 'Entreprises'),
       ('8+', 'Techs'),
-      ('UEMOA', 'Déploiement'),
+      ('3+', 'Finetech'),
     ];
     return GridView.count(
       crossAxisCount: 2,
@@ -153,7 +153,7 @@ class AboutScreen extends StatelessWidget {
       mainAxisSpacing: 10,
       childAspectRatio: 2.4,
       children: stats.map((s) => Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10), // était 18
         decoration: BoxDecoration(
           color: AppColors.card,
           border: Border.all(color: AppColors.border),
@@ -163,18 +163,27 @@ class AboutScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(s.$1, style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: AppColors.accent,
-              letterSpacing: -0.5,
-              fontFamily: 'Syne',
-            )),
-            Text(s.$2, style: const TextStyle(
-              fontSize: 10,
-              color: AppColors.muted,
-              letterSpacing: 1,
-            )),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(s.$1, style: const TextStyle(
+                fontSize: 20,       // était 22
+                fontWeight: FontWeight.w800,
+                color: AppColors.accent,
+                letterSpacing: -0.5,
+                fontFamily: 'Syne',
+              )),
+            ),
+            SizedBox(height: 2),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(s.$2, style: const TextStyle(
+                fontSize: 8,
+                color: AppColors.muted,
+                letterSpacing: 1,
+              )),
+            ),
           ],
         ),
       )).toList(),
