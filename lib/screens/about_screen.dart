@@ -2,248 +2,286 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/cv_download_button.dart';
+import '../widgets/portfolio_page.dart';
+import '../widgets/project_artwork.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key});
+  final VoidCallback? onProjects;
+  final VoidCallback? onContact;
+  const AboutScreen({super.key, this.onProjects, this.onContact});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHero(context),
-          const SizedBox(height: 28),
-          _buildBio(),
-          const SizedBox(height: 28),
-          _buildStats(),
-          const SizedBox(height: 32),
-          _buildLanguages(),
-          const SizedBox(height: 32),
-          _buildInterests(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHero(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF0D1F17), Color(0xFF0A1220)],
-        ),
-        border: Border.all(color: AppColors.accent),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.accent.withOpacity(0.4)),
+    return PortfolioPage(
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final wide = constraints.maxWidth >= 780;
+            final introduction = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'MODOU MAMOUNE DIOP  /  DÉVELOPPEUR',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.muted,
+                    letterSpacing: 1.6,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                child: const Center(
-                  child: Text('MD', style: TextStyle(
-                    fontSize: 18,
+                const SizedBox(height: 22),
+                Text(
+                  'Du mobile.\nDu web.\nDu concret.',
+                  style: TextStyle(
+                    fontSize: wide ? 76 : 48,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.accent,
-                  )),
+                    height: 1.02,
+                    letterSpacing: wide ? -4 : -2.5,
+                    color: AppColors.text,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontFamily: 'Syne',
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.text,
-                          letterSpacing: -0.5,
-                        ),
-                        children: [
-                          TextSpan(text: 'Modou '),
-                          TextSpan(
-                            text: 'Mamoune',
-                            style: TextStyle(color: AppColors.accent),
-                          ),
-                          TextSpan(text: ' Diop'),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Développeur Web & Mobile · Full-Stack',
-                      style: TextStyle(
-                        fontSize: 11,
-                        letterSpacing: 2,
-                        color: AppColors.muted,
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 22),
+                const Text(
+                  'Je suis Mamoune, développeur à Dakar.\nJe construis des applications pour les paiements, les services publics et les usages du quotidien.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: 1.65,
+                    color: AppColors.muted,
+                  ),
                 ),
+                const SizedBox(height: 24),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 320),
+                  child: CvDownloadButton(),
+                ),
+                const SizedBox(height: 10),
+                TextButton.icon(
+                  onPressed: onProjects,
+                  icon: const Icon(Icons.arrow_downward, size: 17),
+                  label: const Text('Découvrir mes projets'),
+                ),
+              ],
+            );
+            final visual = _IdentityArt();
+            return wide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(flex: 6, child: introduction),
+                      const SizedBox(width: 50),
+                      Expanded(flex: 5, child: visual),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      introduction,
+                      const SizedBox(height: 30),
+                      SizedBox(width: double.infinity, child: visual),
+                    ],
+                  );
+          },
+        ),
+        const SizedBox(height: 38),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppColors.border),
+              bottom: BorderSide(color: AppColors.border),
+            ),
+          ),
+          child: const Wrap(
+            spacing: 32,
+            runSpacing: 12,
+            children: [
+              Text(
+                'Flutter & Dart',
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
+              Text(
+                'React & Next.js',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              Text(
+                'Angular & PHP',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              Text('Basé à Dakar', style: TextStyle(color: AppColors.muted)),
             ],
           ),
-          const SizedBox(height: 16),
-          _infoChip(Icons.location_on_outlined, 'Dakar, Sénégal'),
-          const SizedBox(height: 6),
-          _infoChip(Icons.phone_outlined, '+221 77 157 93 13'),
-          const SizedBox(height: 6),
-          _infoChip(Icons.code_outlined, 'github.com/DiopMamoune'),
-        ],
-      ),
-    );
-  }
-
-  Widget _infoChip(IconData icon, String label) {
-    return Row(
-      children: [
-        Icon(icon, size: 14, color: AppColors.accent),
-        const SizedBox(width: 8),
-        Text(label, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
-      ],
-    );
-  }
-
-  Widget _buildBio() {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Text(
-        PortfolioData.bio,
-        style: TextStyle(
-          fontSize: 14,
-          color: Color(0xFFA0A0B0),
-          height: 1.85,
         ),
-      ),
-    );
-  }
-
-  Widget _buildStats() {
-    final stats = [
-      ('5+', 'Ans XP'),
-      ('5', 'Entreprises'),
-      ('8+', 'Techs'),
-      ('3+', 'Finetech'),
-    ];
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      childAspectRatio: 2.4,
-      children: stats.map((s) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10), // était 18
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(10),
+        const SizedBox(height: 42),
+        const SectionHeader('Quelques réalisations'),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final wide = constraints.maxWidth > 650;
+            final cards = [
+              for (var i = 0; i < 2; i++)
+                SizedBox(
+                  width: wide
+                      ? (constraints.maxWidth - 24) / 2
+                      : constraints.maxWidth,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    onTap: onProjects,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ProjectArtwork(index: i),
+                        const SizedBox(height: 16),
+                        Text(
+                          PortfolioData.projects[i].name,
+                          style: const TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          PortfolioData.projects[i].tags.join(' · '),
+                          style: const TextStyle(
+                            color: AppColors.muted,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ];
+            return Wrap(spacing: 24, runSpacing: 28, children: cards);
+          },
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(s.$1, style: const TextStyle(
-                fontSize: 20,       // était 22
-                fontWeight: FontWeight.w800,
-                color: AppColors.accent,
-                letterSpacing: -0.5,
-                fontFamily: 'Syne',
-              )),
-            ),
-            SizedBox(height: 2),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(s.$2, style: const TextStyle(
-                fontSize: 8,
-                color: AppColors.muted,
-                letterSpacing: 1,
-              )),
-            ),
-          ],
+        const SizedBox(height: 42),
+        const SectionHeader('Un peu de moi'),
+        const Text(
+          PortfolioData.bio,
+          style: TextStyle(fontSize: 17, color: AppColors.muted, height: 1.8),
         ),
-      )).toList(),
-    );
-  }
-
-  Widget _buildLanguages() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader('Langues'),
-        _langRow('Wolof', 'Natif'),
-        const Divider(color: AppColors.border, height: 1),
-        _langRow('Français', 'Intermédiaire'),
-        const Divider(color: AppColors.border, height: 1),
-        _langRow('Anglais', 'Intermédiaire'),
-      ],
-    );
-  }
-
-  Widget _langRow(String lang, String level) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(lang, style: const TextStyle(fontSize: 14, color: AppColors.text)),
-          Text(level, style: const TextStyle(
-            fontSize: 11, color: AppColors.accent, letterSpacing: 1,
-          )),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInterests() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader('Centres d\'intérêt'),
+        const SizedBox(height: 26),
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: PortfolioData.interests.map((i) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.card,
-              border: Border.all(color: AppColors.border),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('→ ', style: TextStyle(fontSize: 11, color: AppColors.accent)),
-                Text(i, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
-              ],
-            ),
-          )).toList(),
+          children: PortfolioData.interests
+              .map((interest) => TechTag(interest, isBlue: false))
+              .toList(),
+        ),
+        const SizedBox(height: 42),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(26),
+          decoration: BoxDecoration(
+            color: AppColors.sage,
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Un projet en tête ?',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -1,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Parlons de ce que vous souhaitez construire.',
+                style: TextStyle(color: AppColors.muted),
+              ),
+              const SizedBox(height: 16),
+              TextButton.icon(
+                onPressed: onContact,
+                icon: const Icon(Icons.north_east),
+                label: const Text('Me contacter'),
+              ),
+            ],
+          ),
         ),
       ],
+    );
+  }
+}
+
+class _IdentityArt extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.06,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: Container(
+          color: AppColors.sage,
+          child: Stack(
+            children: [
+              Positioned(
+                right: -65,
+                top: -70,
+                child: Container(
+                  width: 330,
+                  height: 330,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.accent, width: 65),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: -90,
+                bottom: -135,
+                child: Container(
+                  width: 340,
+                  height: 340,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFD1DBC1),
+                  ),
+                ),
+              ),
+              const Positioned(
+                left: 26,
+                top: 24,
+                child: Text(
+                  'MOBILE / WEB',
+                  style: TextStyle(
+                    fontSize: 11,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const Center(
+                child: Text(
+                  'md.',
+                  style: TextStyle(
+                    fontSize: 130,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -12,
+                    color: AppColors.text,
+                  ),
+                ),
+              ),
+              const Positioned(
+                left: 26,
+                bottom: 24,
+                child: Text(
+                  'Conçu à Dakar.',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const Positioned(
+                right: 24,
+                bottom: 20,
+                child: Icon(Icons.north_east, size: 32),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

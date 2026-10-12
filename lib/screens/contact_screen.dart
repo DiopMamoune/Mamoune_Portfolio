@@ -3,51 +3,51 @@ import 'package:flutter/services.dart';
 import '../main.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/portfolio_page.dart';
+import '../widgets/cv_download_button.dart';
 
 class ContactScreen extends StatelessWidget {
   const ContactScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionHeader('Contact'),
-          _buildAvailabilityBanner(),
-          const SizedBox(height: 20),
-          _ContactCard(
-            icon: Icons.phone_outlined,
-            label: 'Téléphone',
-            value: PortfolioData.phone,
-            copyValue: PortfolioData.phone,
-          ),
-          const SizedBox(height: 10),
-          _ContactCard(
-            icon: Icons.email_outlined,
-            label: 'Email',
-            value: PortfolioData.email,
-            copyValue: PortfolioData.email,
-          ),
-          const SizedBox(height: 10),
-          _ContactCard(
-            icon: Icons.link_outlined,
-            label: 'LinkedIn',
-            value: 'modou-mamoune-diop-598952199',
-            copyValue: 'https://${PortfolioData.linkedin}',
-          ),
-          const SizedBox(height: 10),
-          _ContactCard(
-            icon: Icons.code_outlined,
-            label: 'GitHub',
-            value: 'DiopMamoune',
-            copyValue: 'https://${PortfolioData.github}',
-          ),
-          const SizedBox(height: 32),
-          _buildQuickStats(context),
-        ],
-      ),
+    return PortfolioPage(
+      children: [
+        const SectionHeader('Contact'),
+        const CvDownloadButton(),
+        const SizedBox(height: 20),
+        _buildAvailabilityBanner(),
+        const SizedBox(height: 20),
+        _ContactCard(
+          icon: Icons.phone_outlined,
+          label: 'Téléphone',
+          value: PortfolioData.phone,
+          copyValue: PortfolioData.phone,
+        ),
+        const SizedBox(height: 10),
+        _ContactCard(
+          icon: Icons.email_outlined,
+          label: 'Email',
+          value: PortfolioData.email,
+          copyValue: PortfolioData.email,
+        ),
+        const SizedBox(height: 10),
+        _ContactCard(
+          icon: Icons.link_outlined,
+          label: 'LinkedIn',
+          value: 'modou-mamoune-diop-598952199',
+          copyValue: 'https://${PortfolioData.linkedin}',
+        ),
+        const SizedBox(height: 10),
+        _ContactCard(
+          icon: Icons.code_outlined,
+          label: 'GitHub',
+          value: 'DiopMamoune',
+          copyValue: 'https://${PortfolioData.github}',
+        ),
+        const SizedBox(height: 32),
+        _buildQuickStats(context),
+      ],
     );
   }
 
@@ -55,8 +55,8 @@ class ContactScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.accent.withOpacity(0.06),
-        border: Border.all(color: AppColors.accent.withOpacity(0.3)),
+        color: AppColors.accent.withValues(alpha: 0.06),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -78,10 +78,7 @@ class ContactScreen extends StatelessWidget {
                 SizedBox(height: 3),
                 Text(
                   'Ouvert aux opportunités · Consultant disponible',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.text,
-                  ),
+                  style: TextStyle(fontSize: 13, color: AppColors.text),
                 ),
               ],
             ),
@@ -115,8 +112,7 @@ class ContactScreen extends StatelessWidget {
           const Divider(color: AppColors.border, height: 20),
           _statRow('Localisation', 'Dakar, Sénégal'),
           const Divider(color: AppColors.border, height: 20),
-          _statRow('Disponibilité', 'Immédiate'),
-          const Divider(color: AppColors.border, height: 20),
+
           _statRow('Préférence', 'Mobile & Web Full-Stack'),
         ],
       ),
@@ -128,7 +124,13 @@ class ContactScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(key, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
-        Text(val, style: const TextStyle(fontSize: 13, color: AppColors.text)),
+        Flexible(
+          child: Text(
+            val,
+            textAlign: TextAlign.right,
+            style: const TextStyle(fontSize: 13, color: AppColors.text),
+          ),
+        ),
       ],
     );
   }
@@ -174,7 +176,7 @@ class _ContactCard extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.accent.withOpacity(0.1),
+                color: AppColors.accent.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 18, color: AppColors.accent),
@@ -184,12 +186,19 @@ class _ContactCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label.toUpperCase(),
-                      style: const TextStyle(
-                          fontSize: 9, color: AppColors.muted, letterSpacing: 1.5)),
+                  Text(
+                    label.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: AppColors.muted,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
                   const SizedBox(height: 3),
-                  Text(value,
-                      style: const TextStyle(fontSize: 14, color: AppColors.text)),
+                  Text(
+                    value,
+                    style: const TextStyle(fontSize: 14, color: AppColors.text),
+                  ),
                 ],
               ),
             ),
