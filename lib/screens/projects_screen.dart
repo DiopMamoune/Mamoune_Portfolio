@@ -2,100 +2,103 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/portfolio_page.dart';
+import '../widgets/project_artwork.dart';
 
 class ProjectsScreen extends StatelessWidget {
   const ProjectsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionHeader('Projets'),
-          ...PortfolioData.projects.map((p) => _ProjectCard(project: p)),
-        ],
-      ),
+    return PortfolioPage(
+      children: [
+        const SectionHeader('Projets'),
+        const Text(
+          'Des applications,\ndes usages réels.',
+          style: TextStyle(
+            fontSize: 42,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -2,
+            height: 1.1,
+          ),
+        ),
+        const SizedBox(height: 16),
+        const Text(
+          'Paiement, gestion publique, santé et géolocalisation. Voici les projets auxquels j’ai contribué.',
+          style: TextStyle(fontSize: 16, color: AppColors.muted),
+        ),
+        const SizedBox(height: 32),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final wide = constraints.maxWidth > 700;
+            return Wrap(
+              spacing: 28,
+              runSpacing: 36,
+              children: [
+                for (var i = 0; i < PortfolioData.projects.length; i++)
+                  SizedBox(
+                    width: wide
+                        ? (constraints.maxWidth - 28) / 2
+                        : constraints.maxWidth,
+                    child: _ProjectCard(
+                      project: PortfolioData.projects[i],
+                      index: i,
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }
 
-class _ProjectCard extends StatefulWidget {
+class _ProjectCard extends StatelessWidget {
   final Project project;
-  const _ProjectCard({required this.project});
-
-  @override
-  State<_ProjectCard> createState() => _ProjectCardState();
-}
-
-class _ProjectCardState extends State<_ProjectCard> {
-  bool _hovered = false;
+  final int index;
+  const _ProjectCard({required this.project, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.only(bottom: 14),
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          border: Border.all(
-            color: _hovered ? AppColors.accent : AppColors.border,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ProjectArtwork(index: index, height: 240),
+        const SizedBox(height: 18),
+        Text(
+          project.name,
+          style: const TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -.7,
           ),
-          borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: AppColors.accent.withOpacity(0.1),
-                border: Border.all(color: AppColors.accent.withOpacity(0.2)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  widget.project.icon,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.project.name,
-                    style: const TextStyle(
-                      fontFamily: 'Syne',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.text,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    widget.project.description,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.muted,
-                      height: 1.65,
-                    ),
-                  ),
-                  TagRow(widget.project.tags),
-                ],
-              ),
-            ),
-          ],
+        const SizedBox(height: 10),
+        Text(
+          project.description,
+          style: const TextStyle(
+            fontSize: 15,
+            color: AppColors.muted,
+            height: 1.6,
+          ),
         ),
-      ),
+        const SizedBox(height: 16),
+        const Text(
+          'Ma contribution',
+          style: TextStyle(
+            fontSize: 12,
+            color: AppColors.accent,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          project.contribution,
+          style: const TextStyle(fontSize: 14, height: 1.65),
+        ),
+        TagRow(project.tags),
+      ],
     );
   }
 }

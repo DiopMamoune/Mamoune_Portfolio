@@ -2,29 +2,30 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/portfolio_page.dart';
 
 class SkillsScreen extends StatelessWidget {
   const SkillsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final frontend = PortfolioData.skills.where((s) => s.category == 'Frontend / Mobile').toList();
-    final backend = PortfolioData.skills.where((s) => s.category == 'Backend').toList();
+    final frontend = PortfolioData.skills
+        .where((s) => s.category == 'Frontend / Mobile')
+        .toList();
+    final backend = PortfolioData.skills
+        .where((s) => s.category == 'Backend')
+        .toList();
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionHeader('Compétences'),
-          _buildSkillGroup('Frontend / Mobile', frontend),
-          const SizedBox(height: 24),
-          _buildSkillGroup('Backend', backend),
-          const SizedBox(height: 32),
-          const SectionHeader('Outils'),
-          _buildTools(),
-        ],
-      ),
+    return PortfolioPage(
+      children: [
+        const SectionHeader('Compétences'),
+        _buildSkillGroup('Web et mobile', frontend),
+        const SizedBox(height: 24),
+        _buildSkillGroup('Backend', backend),
+        const SizedBox(height: 32),
+        const SectionHeader('Outils'),
+        _buildTools(),
+      ],
     );
   }
 
@@ -48,7 +49,32 @@ class SkillsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          ...skills.map((s) => AnimatedSkillBar(name: s.name, level: s.level)),
+          ...skills.map(
+            (skill) => Padding(
+              padding: const EdgeInsets.only(bottom: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    skill.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    skill.usage,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.text,
+                      height: 1.6,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

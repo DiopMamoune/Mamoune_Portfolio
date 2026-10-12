@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/portfolio_page.dart';
 
 class EducationScreen extends StatelessWidget {
   const EducationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionHeader('Formation'),
-          ...PortfolioData.education.map((e) => _EduCard(edu: e)),
-        ],
-      ),
+    return PortfolioPage(
+      children: [
+        const SectionHeader('Formation'),
+        ...PortfolioData.education.map((e) => _EduCard(edu: e)),
+      ],
     );
   }
 }
@@ -41,16 +38,15 @@ class _EduCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.accent.withOpacity(0.08),
-              border: Border.all(color: AppColors.accent.withOpacity(0.25)),
+              color: AppColors.accent.withValues(alpha: 0.08),
+              border: Border.all(
+                color: AppColors.accent.withValues(alpha: 0.25),
+              ),
               borderRadius: BorderRadius.circular(5),
             ),
             child: Text(
               edu.years,
-              style: const TextStyle(
-                fontSize: 10,
-                color: AppColors.accent,
-              ),
+              style: const TextStyle(fontSize: 10, color: AppColors.accent),
             ),
           ),
           const SizedBox(width: 14),
@@ -61,7 +57,6 @@ class _EduCard extends StatelessWidget {
                 Text(
                   edu.school,
                   style: const TextStyle(
-                    fontFamily: 'Syne',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.text,
