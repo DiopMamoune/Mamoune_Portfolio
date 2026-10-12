@@ -9,166 +9,156 @@ import 'contact_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-
-  final List<_NavItem> _items = const [
-    _NavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profil'),
-    _NavItem(icon: Icons.work_outline, activeIcon: Icons.work, label: 'XP'),
-    _NavItem(icon: Icons.code_outlined, activeIcon: Icons.code, label: 'Skills'),
-    _NavItem(icon: Icons.folder_outlined, activeIcon: Icons.folder, label: 'Projets'),
-    _NavItem(icon: Icons.school_outlined, activeIcon: Icons.school, label: 'Formation'),
-    _NavItem(icon: Icons.mail_outline, activeIcon: Icons.mail, label: 'Contact'),
+  static const _labels = [
+    'Profil',
+    'Parcours',
+    'Compétences',
+    'Projets',
+    'Formation',
+    'Contact',
+  ];
+  static const _icons = [
+    Icons.person_outline,
+    Icons.work_outline,
+    Icons.code,
+    Icons.grid_view_outlined,
+    Icons.school_outlined,
+    Icons.mail_outline,
   ];
 
-  final List<Widget> _screens = const [
-    AboutScreen(),
-    ExperiencesScreen(),
-    SkillsScreen(),
-    ProjectsScreen(),
-    EducationScreen(),
-    ContactScreen(),
-  ];
+  void _navigate(int index) => setState(() => _currentIndex = index);
 
   @override
   Widget build(BuildContext context) {
+    final desktop = MediaQuery.sizeOf(context).width >= 900;
+    final screens = [
+      AboutScreen(
+        onProjects: () => _navigate(3),
+        onContact: () => _navigate(5),
+      ),
+      const ExperiencesScreen(),
+      const SkillsScreen(),
+      const ProjectsScreen(),
+      const EducationScreen(),
+      const ContactScreen(),
+    ];
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      appBar: _buildAppBar(),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
-        transitionBuilder: (child, anim) => FadeTransition(opacity: anim, child: child),
-        child: KeyedSubtree(
-          key: ValueKey<int>(_currentIndex),
-          child: _screens[_currentIndex],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNav(),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: AppColors.bg,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-      centerTitle: false,
-      title: RichText(
-        text: const TextSpan(
-          style: TextStyle(
-            fontFamily: 'Syne',
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColors.text,
-            letterSpacing: -0.3,
+      appBar: AppBar(
+        toolbarHeight: desktop ? 92 : 68,
+        backgroundColor: AppColors.bg,
+        surfaceTintColor: Colors.transparent,
+        titleSpacing: desktop ? 48 : 22,
+        title: TextButton(
+          onPressed: () => _navigate(0),
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.text,
+            padding: EdgeInsets.zero,
           ),
-          children: [
-            TextSpan(text: 'M.'),
-            TextSpan(text: 'Mamoune', style: TextStyle(color: AppColors.accent)),
-            TextSpan(text: ' Diop'),
-          ],
-        ),
-      ),
-      actions: [
-        Container(
-          margin: const EdgeInsets.only(right: 16, top: 10, bottom: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.accent.withOpacity(0.1),
-            border: Border.all(color: AppColors.accent.withOpacity(0.3)),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 5, height: 5,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.accent,
-                ),
-              ),
-              const SizedBox(width: 5),
-              const Text(
-                'DISPO',
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.accent,
-                  letterSpacing: 1,
-                ),
-              ),
-            ],
+          child: const Text(
+            'mamoune.diop',
+            style: TextStyle(
+              fontSize: 21,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -1,
+            ),
           ),
         ),
-      ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(height: 1, color: AppColors.border),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: const Border(top: BorderSide(color: AppColors.border)),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(_items.length, (i) {
-              final item = _items[i];
-              final isActive = i == _currentIndex;
-              return GestureDetector(
-                onTap: () => setState(() => _currentIndex = i),
-                behavior: HitTestBehavior.opaque,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: isActive ? AppColors.accent.withOpacity(0.1) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        isActive ? item.activeIcon : item.icon,
-                        size: 20,
-                        color: isActive ? AppColors.accent : AppColors.muted,
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        item.label,
+        actions: desktop
+            ? [
+                for (var i = 0; i < _labels.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 18),
+                    child: TextButton(
+                      onPressed: () => _navigate(i),
+                      child: Text(
+                        _labels[i],
                         style: TextStyle(
-                          fontSize: 10,
-                          color: isActive ? AppColors.accent : AppColors.muted,
-                          fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                          color: _currentIndex == i
+                              ? AppColors.accent
+                              : AppColors.muted,
+                          fontWeight: _currentIndex == i
+                              ? FontWeight.w700
+                              : FontWeight.w400,
                         ),
                       ),
+                    ),
+                  ),
+                const SizedBox(width: 22),
+              ]
+            : [
+                const Padding(
+                  padding: EdgeInsets.only(right: 22),
+                  child: Chip(
+                    label: Text('Dakar, SN', style: TextStyle(fontSize: 11)),
+                    side: BorderSide.none,
+                    backgroundColor: AppColors.sage,
+                  ),
+                ),
+              ],
+      ),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 220),
+        child: KeyedSubtree(
+          key: ValueKey(_currentIndex),
+          child: screens[_currentIndex],
+        ),
+      ),
+      bottomNavigationBar: desktop
+          ? null
+          : Container(
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
+                border: Border(top: BorderSide(color: AppColors.border)),
+              ),
+              child: SafeArea(
+                child: SizedBox(
+                  height: 70,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < _labels.length; i++)
+                        Expanded(
+                          child: Tooltip(
+                            message: _labels[i],
+                            child: InkWell(
+                              onTap: () => _navigate(i),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    _icons[i],
+                                    color: _currentIndex == i
+                                        ? AppColors.accent
+                                        : AppColors.muted,
+                                    size: 22,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    i == 2 ? 'Expertise' : _labels[i],
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: _currentIndex == i
+                                          ? AppColors.accent
+                                          : AppColors.muted,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
-              );
-            }),
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
-}
-
-class _NavItem {
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  const _NavItem({required this.icon, required this.activeIcon, required this.label});
 }

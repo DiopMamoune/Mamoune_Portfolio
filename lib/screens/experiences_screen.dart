@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/portfolio_page.dart';
 
 class ExperiencesScreen extends StatelessWidget {
   const ExperiencesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionHeader('Expériences'),
-          _buildFeatured(PortfolioData.experiences[0]),
-          const SizedBox(height: 8),
-          ...PortfolioData.experiences.skip(1).map(
-            (exp) => _buildTimelineItem(exp, isLast: exp == PortfolioData.experiences.last),
-          ),
-        ],
-      ),
+    return PortfolioPage(
+      children: [
+        const SectionHeader('Expériences'),
+        _buildFeatured(PortfolioData.experiences[0]),
+        const SizedBox(height: 8),
+        ...PortfolioData.experiences
+            .skip(1)
+            .map(
+              (exp) => _buildTimelineItem(
+                exp,
+                isLast: exp == PortfolioData.experiences.last,
+              ),
+            ),
+      ],
     );
   }
 
@@ -31,7 +33,7 @@ class ExperiencesScreen extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF0A1A10), Color(0xFF0A1220)],
+          colors: [AppColors.blueTint, AppColors.surface],
         ),
         border: Border.all(color: AppColors.accent),
         borderRadius: BorderRadius.circular(14),
@@ -40,7 +42,9 @@ class ExperiencesScreen extends StatelessWidget {
         children: [
           // Left accent bar
           Positioned(
-            top: 0, bottom: 0, left: 0,
+            top: 0,
+            bottom: 0,
+            left: 0,
             child: Container(
               width: 3,
               decoration: BoxDecoration(
@@ -62,14 +66,19 @@ class ExperiencesScreen extends StatelessWidget {
                     const PulseDot(),
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
-                        color: AppColors.accent.withOpacity(0.1),
-                        border: Border.all(color: AppColors.accent.withOpacity(0.3)),
+                        color: AppColors.accent.withValues(alpha: 0.1),
+                        border: Border.all(
+                          color: AppColors.accent.withValues(alpha: 0.3),
+                        ),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Text(
-                        'POSTE ACTUEL · TEMPS PLEIN',
+                        'MISSION ACTUELLE · CONSULTANT',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -84,7 +93,6 @@ class ExperiencesScreen extends StatelessWidget {
                 Text(
                   exp.company,
                   style: const TextStyle(
-                    fontFamily: 'Syne',
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: AppColors.text,
@@ -94,30 +102,45 @@ class ExperiencesScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   exp.role,
-                  style: const TextStyle(fontSize: 13, color: AppColors.accent, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    const Icon(Icons.location_on_outlined, size: 12, color: AppColors.muted),
+                    const Icon(
+                      Icons.location_on_outlined,
+                      size: 12,
+                      color: AppColors.muted,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       exp.location,
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.muted,
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
                   exp.date,
-                  style: const TextStyle(fontSize: 11, color: AppColors.muted, letterSpacing: 0.5),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppColors.muted,
+                    letterSpacing: 0.5,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   exp.description,
                   style: const TextStyle(
                     fontSize: 13.5,
-                    color: Color(0xFF9A9AAA),
+                    color: AppColors.muted,
                     height: 1.7,
                   ),
                 ),
@@ -165,21 +188,38 @@ class ExperiencesScreen extends StatelessWidget {
                 Text(
                   exp.company,
                   style: const TextStyle(
-                    fontFamily: 'Syne',
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: AppColors.text,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(exp.role,
-                    style: const TextStyle(fontSize: 13, color: AppColors.accent, fontWeight: FontWeight.w500)),
+                Text(
+                  exp.role,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(exp.date,
-                    style: const TextStyle(fontSize: 11, color: AppColors.muted, letterSpacing: 0.5)),
+                Text(
+                  exp.date,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppColors.muted,
+                    letterSpacing: 0.5,
+                  ),
+                ),
                 const SizedBox(height: 8),
-                Text(exp.description,
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF8A8A94), height: 1.7)),
+                Text(
+                  exp.description,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.muted,
+                    height: 1.7,
+                  ),
+                ),
                 TagRow(exp.tags),
               ],
             ),
