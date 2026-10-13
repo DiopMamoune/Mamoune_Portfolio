@@ -92,14 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 22),
               ]
             : [
-                const Padding(
+                /*const Padding(
                   padding: EdgeInsets.only(right: 22),
                   child: Chip(
                     label: Text('Dakar, SN', style: TextStyle(fontSize: 11)),
                     side: BorderSide.none,
                     backgroundColor: AppColors.sage,
                   ),
-                ),
+                ),*/
               ],
       ),
       body: AnimatedSwitcher(

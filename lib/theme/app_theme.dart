@@ -16,6 +16,16 @@ class AppColors {
 
 ThemeData portfolioTheme() => ThemeData(
   useMaterial3: true,
+  fontFamily: 'CupertinoSystemText',
+  fontFamilyFallback: const [
+    'SF Pro Text',
+    'SF Pro Display',
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Helvetica Neue',
+    'Arial',
+    'sans-serif',
+  ],
   brightness: Brightness.light,
   scaffoldBackgroundColor: AppColors.bg,
   colorScheme: const ColorScheme.light(
